@@ -2,13 +2,13 @@ import streamlit as st
 import numpy as np
 from PIL import Image
 
-def arguments():
-  global num_image = 0
+#num_image = 0
 
 def pass_image_to_face_gan(original_image, glasses_toggle, gender_toggle, age_slider, pose_slider):
   return original_image
 
 def load_and_save_image(img_file_buffer):
+  num_image=0
   image = Image.open(img_file_buffer)
   image.save(str(num_image)+"_image.jpg")
   num_image += 1
@@ -30,12 +30,12 @@ st.title('Face-Gan App')
 
 st.header('Upload an Image of a Face to Manipulate')
 
-img_file_buffer = st.file_uploader("Upload a movie poster", type=["png", "jpg", "jpeg"])
+img_file_buffer = st.file_uploader("Upload", type=["png", "jpg", "jpeg"])
 
 glasses_toggle = st.checkbox(label='Add glasses', value=False)
 gender_toggle = st.checkbox(label='Change Gender', value=False)
-age_toggle = st.checkbox(label='Add glasses', value=False)
-pose_toggle = st.checkbox(label='Add glasses', value=False)
+age_toggle = st.checkbox(label='Age Variation', value=False)
+pose_toggle = st.checkbox(label='Pose Variation', value=False)
 
 rotate_toggle = st.checkbox(label='Rotate Image', value=False)
 rotate_slider = st.slider('hour', 0, 360, 90)
@@ -47,7 +47,7 @@ if img_file_buffer is not None:
     
     altered_image = pass_image_to_face_gan(original_image, glasses_toggle, gender_toggle, age_toggle, pose_toggle)
     
-    altered_image = modify_image(altered_image, rotate_toggle, enlarge_toggle)
+    altered_image = modify_image(altered_image, rotate_toggle, rotate_slider, enlarge_toggle)
     
     st.image(
         np.array(altered_image), caption=f"Processed image", use_column_width=True,
